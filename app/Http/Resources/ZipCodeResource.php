@@ -3,11 +3,14 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\SettlementsCollectionResource;
+use App\Traits\HandleStrings;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
 class ZipCodeResource extends JsonResource
 {
+    use HandleStrings;
+
     /**
      * Removes data wrapper from the resource.
      */
@@ -23,16 +26,16 @@ class ZipCodeResource extends JsonResource
     {
         return [
             'zip_code' => $this->zip_code,
-            'locality' => $this->locality,
+            'locality' => $this->sanitizeString(Str::upper($this->locality)),
             'federal_entity' => [
                 'key' => $this->federalEntity->key,
-                'name' => Str::upper($this->federalEntity->name),
+                'name' => $this->sanitizeString(Str::upper($this->federalEntity->name)),
                 'code' => $this->federalEntity->code,
             ],
             'settlements' => new SettlementsCollectionResource($this->settlements),
             'municipality' => [
                 'key' => $this->municipality->key,
-                'name' => Str::upper($this->municipality->name),
+                'name' => $this->sanitizeString(Str::upper($this->municipality->name)),
             ],
         ];
     }

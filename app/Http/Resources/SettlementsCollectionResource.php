@@ -2,11 +2,14 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\HandleStrings;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Str;
 
 class SettlementsCollectionResource extends ResourceCollection
 {
+    use HandleStrings;
+
     /**
      * Transform the resource collection into an array.
      *
@@ -18,7 +21,7 @@ class SettlementsCollectionResource extends ResourceCollection
         return $this->collection->map(function($settlement) {
             return [
                 'key' => $settlement->key,
-                'name' => Str::upper($settlement->name),
+                'name' => $this->sanitizeString(Str::upper($settlement->name)),
                 'zone_type' => Str::upper($settlement->zone_type),
                 'settlement_type' => [
                     'name' => $settlement->settlement_type,
